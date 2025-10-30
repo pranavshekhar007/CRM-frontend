@@ -98,4 +98,102 @@ export const downloadLoanExcelServ = async () => {
       throw error;
     }
   };
+
+  // ✅ Add New Loan for Existing User
+export const addNewLoanForExistingServ = async (formData) => {
+  try {
+    const response = await axios.post(
+      BASE_URL + "loan/addNewLoanForExisting",
+      formData,
+    );
+    return response;
+  } catch (error) {
+    console.error("Error adding new loan for existing user:", error);
+    throw error;
+  }
+};
+
+// ✅ Get Loan Payment History by ID
+export const getLoanHistoryServ = async (id) => {
+  try {
+    const response = await axios.get(BASE_URL + `loan/history/${id}`,);
+    return response;
+  } catch (error) {
+    console.error("Error fetching loan payment history:", error);
+    throw error;
+  }
+};
   
+export const getProfitServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/profit",);
+    return response;
+  } catch (error) {
+    console.error("Error fetching profit data:", error);
+    throw error;
+  }
+};
+
+
+export const getExpenseServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/expense",);
+    return response;
+  } catch (error) {
+    console.error("Error fetching expense data:", error);
+    throw error;
+  }
+};
+
+export const downloadProfitExcelServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/download/profit/excel", {
+      responseType: "blob",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading profit Excel:", error);
+    throw error;
+  }
+};
+
+export const downloadExpenseExcelServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/download/expense/excel", {
+      responseType: "blob",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading expense Excel:", error);
+    throw error;
+  }
+};
+
+
+export const downloadProfitPDFServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/download/profit/pdf", {
+      responseType: "blob",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading profit PDF:", error);
+    throw error;
+  }
+};
+
+export const downloadExpensePDFServ = async () => {
+  try {
+    const response = await axios.get(BASE_URL + "loan/download/expense/pdf", {
+      responseType: "blob",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading expense PDF:", error);
+    throw error;
+  }
+};

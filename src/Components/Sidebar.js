@@ -67,6 +67,8 @@ function Sidebar({ selectedMenu, selectedItem }) {
         menu: "Collections",
         subMenu: [
           { name: "Collections", path: "/collection", module: "Collection" },
+          { name: "Profit", path: "/profit", module: "Profit" },
+          { name: "Expense", path: "/expense", module: "Expense" },
         ],
       },
     ],

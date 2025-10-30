@@ -54,7 +54,9 @@ const NAV_STRUCTURE = [
   {
     menu: "Collections",
     subMenu: [
-      { name: "Collections", path: "/collection"},
+      { name: "Collections", path: "/collection" },
+      { name: "Profit", path: "/profit" },
+      { name: "Expense", path: "/expense" },
     ],
   },
 ];

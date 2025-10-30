@@ -73,6 +73,8 @@ import AttendancePolicy from '../Pages/Attendance/AttendancePolicy';
 import AttendanceRecord from '../Pages/Attendance/AttendanceRecord';
 import AttendanceRegularization from '../Pages/Attendance/AttendanceRegularization';
 import LoanCollection from '../Pages/Collection/LoanCollection';
+import ProfitDashboard from '../Pages/Collection/ProfitDashboard';
+import ExpenseDashboard from '../Pages/Collection/ExpenseDashboard';
 
 
 function AuthenticatedRoutes() {
@@ -203,6 +205,8 @@ function AuthenticatedRoutes() {
 
         {/* loan Collection  */}
         <Route path='/collection' element={<LoanCollection />} />
+        <Route path='/profit' element={<ProfitDashboard />} />
+        <Route path='/expense' element={<ExpenseDashboard />} />
     </Routes>
   )
 }
