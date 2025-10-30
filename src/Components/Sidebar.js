@@ -20,14 +20,14 @@ function Sidebar({ selectedMenu, selectedItem }) {
         menu: "Dashboard",
         subMenu: [{ name: "Dashboard", path: "/" }],
       },
-      {
-        menuIcon: "https://cdn-icons-png.flaticon.com/128/1144/1144760.png",
-        menu: "Staff",
-        subMenu: [
-          { name: "Users", path: "/user-list", module: "Users" },
-          { name: "Role", path: "/role-list", module: "Role" },
-        ],
-      },
+      // {
+      //   menuIcon: "https://cdn-icons-png.flaticon.com/128/1144/1144760.png",
+      //   menu: "Staff",
+      //   subMenu: [
+      //     { name: "Users", path: "/user-list", module: "Users" },
+      //     { name: "Role", path: "/role-list", module: "Role" },
+      //   ],
+      // },
       {
         menuIcon: "https://cdn-icons-png.flaticon.com/128/9720/9720869.png",
         menu: "Hr Management",
