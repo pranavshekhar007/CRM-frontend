@@ -255,17 +255,23 @@ function LoanCollection() {
     }
 
     try {
-      await addInstallmentServ(selectedInstallLoan._id, {
+      const res = await addInstallmentServ(selectedInstallLoan._id, {
         installAmount: amountValue,
       });
-      toast.success("Installment added successfully!");
+      const message = res?.data?.message || "Installment added successfully!";
+      toast.success(message);
       setShowInstallmentModal(false);
       setInstallAmount("");
-      // refresh list
       handleGetLoans();
     } catch (err) {
       console.error(err);
-      toast.error("Failed to add installment");
+
+      const backendMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to add installment";
+
+      toast.error(backendMessage);
     }
   };
 
@@ -1518,17 +1524,19 @@ function LoanCollection() {
                     </select>
                   </div>
 
-                  {/* Readonly Totals */}
                   {[
                     {
+                      name: "totalPaidInstallments",
                       label: "Total Paid Installments",
                       value: loanForm.totalPaidInstallments ?? 0,
                     },
                     {
+                      name: "totalPaidLoan",
                       label: "Total Paid Loan",
                       value: loanForm.totalPaidLoan ?? 0,
                     },
                     {
+                      name: "remainingLoan",
                       label: "Remaining Loan",
                       value: loanForm.remainingLoan ?? "",
                     },
@@ -1542,13 +1550,16 @@ function LoanCollection() {
                       </label>
                       <input
                         className="form-control"
+                        name={field.name}
                         type="number"
                         value={field.value}
-                        readOnly
+                        onChange={handleFormChange}
+                        readOnly={modalMode !== "addExisting"} // ✅ Editable only for Add Existing
                         style={{
                           borderRadius: 8,
                           padding: "10px 12px",
-                          background: "#f8fafc",
+                          background:
+                            modalMode === "addExisting" ? "white" : "#f8fafc",
                           fontWeight: 600,
                         }}
                       />

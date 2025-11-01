@@ -75,6 +75,7 @@ import AttendanceRegularization from '../Pages/Attendance/AttendanceRegularizati
 import LoanCollection from '../Pages/Collection/LoanCollection';
 import ProfitDashboard from '../Pages/Collection/ProfitDashboard';
 import ExpenseDashboard from '../Pages/Collection/ExpenseDashboard';
+import FinanceDashboard from '../Pages/Finance Management/FinanceDashboard';
 
 
 function AuthenticatedRoutes() {
@@ -207,6 +208,9 @@ function AuthenticatedRoutes() {
         <Route path='/collection' element={<LoanCollection />} />
         <Route path='/profit' element={<ProfitDashboard />} />
         <Route path='/expense' element={<ExpenseDashboard />} />
+
+        {/* Finance  */}
+        <Route path='/finance' element={<FinanceDashboard />} />
     </Routes>
   )
 }

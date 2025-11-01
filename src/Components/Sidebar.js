@@ -67,8 +67,15 @@ function Sidebar({ selectedMenu, selectedItem }) {
         menu: "Collections",
         subMenu: [
           { name: "Collections", path: "/collection", module: "Collection" },
-          { name: "Profit", path: "/profit", module: "Profit" },
-          { name: "Expense", path: "/expense", module: "Expense" },
+          // { name: "Profit", path: "/profit", module: "Profit" },
+          // { name: "Expense", path: "/expense", module: "Expense" },
+        ],
+      },
+      {
+        menuIcon: "https://cdn-icons-png.flaticon.com/128/3839/3839635.png",
+        menu: "Finance Management",
+        subMenu: [
+          { name: "Finance", path: "/finance", module: "Finance" },
         ],
       },
     ],

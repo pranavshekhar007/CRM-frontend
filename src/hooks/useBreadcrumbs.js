@@ -59,6 +59,12 @@ const NAV_STRUCTURE = [
       { name: "Expense", path: "/expense" },
     ],
   },
+  {
+    menu: "Finance Management",
+    subMenu: [
+      { name: "Finance", path: "/finance"},
+    ],
+  },
 ];
 
 const useBreadcrumbs = () => {
