@@ -150,9 +150,29 @@ export const downloadInvestmentPdfServ = async () => {
 
 /* ------------------------------- PROFIT SERVICES ---------------------------- */
 
+export const createProfitServ = async (formData) => {
+  try {
+    const response = await axios.post(BASE_URL + "profit/create", formData);
+    return response;
+  } catch (error) {
+    console.error("Error creating profit:", error);
+    throw error;
+  }
+};
+
+export const getProfitListServ = async (formData = {}) => {
+  try {
+    const response = await axios.post(BASE_URL + "profit/list", formData);
+    return response;
+  } catch (error) {
+    console.error("Error fetching profit list:", error);
+    throw error;
+  }
+};
+
 export const getProfitSummaryServ = async () => {
   try {
-    const response = await axios.get(BASE_URL + "loan/profit");
+    const response = await axios.get(BASE_URL + "profit/summary");
     return response;
   } catch (error) {
     console.error("Error fetching profit summary:", error);
@@ -180,6 +200,58 @@ export const downloadProfitPdfServ = async () => {
     return response;
   } catch (error) {
     console.error("Error downloading profit PDF:", error);
+    throw error;
+  }
+};
+
+
+export const createReserverFund = async (formData) => {
+  try {
+    const response = await axios.post(BASE_URL + "reserve-fund/create", formData);
+    return response;
+  } catch (error) {
+    console.error("Error creating profit:", error);
+    throw error;
+  }
+};
+
+
+
+export const getCombinedFinanceListServ = async (formData = {}) => {
+  try {
+    const response = await axios.post(
+      BASE_URL + "finance/list",
+      formData,
+    );
+    return response;
+  } catch (error) {
+    console.error("Error fetching combined finance list:", error);
+    throw error;
+  }
+};
+
+export const downloadCombinedFinanceExcelServ = async (params = {}) => {
+  try {
+    const response = await axios.get(BASE_URL + "finance/download/excel", {
+      params,
+      responseType: "blob",
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading combined finance Excel:", error);
+    throw error;
+  }
+};
+
+export const downloadCombinedFinancePdfServ = async (params = {}) => {
+  try {
+    const response = await axios.get(BASE_URL + "finance/download/pdf", {
+      params,
+      responseType: "blob",
+    });
+    return response;
+  } catch (error) {
+    console.error("Error downloading combined finance PDF:", error);
     throw error;
   }
 };

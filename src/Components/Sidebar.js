@@ -142,19 +142,18 @@ function Sidebar({ selectedMenu, selectedItem }) {
 
       {/* Brand */}
       <div className="hrm-brand no-hamburger">
-        {isExpanded ? (
-          <div className="hrm-wordmark" aria-label="HRM">
-            <span className="hrm-h">O</span>
-            <span className="hrm-m">M</span>
-            <span style={{ margin: "0 8px" }}></span> 
-            <span className="hrm-h">S</span>
-            <span className="hrm-m">A</span>
-            <span className="hrm-m">I</span>
-          </div>
-        ) : (
-          <img className="hrm-logo-compact" src="/crm.svg" alt="Logo" />
-        )}
-      </div>
+  {isExpanded ? (
+    <div className="hrm-wordmark" aria-label="HRM">
+      <h1 className="om-sai">
+        <span className="om-text">OM</span> <span className="sai-text">SAI</span>
+      </h1>
+      <div className="enterprises-text">Enterprises</div>
+    </div>
+  ) : (
+    <img className="hrm-logo-compact" src="/crm.svg" alt="Logo" />
+  )}
+</div>
+
 
       {/* Navigation */}
       <nav className="hrm-nav">

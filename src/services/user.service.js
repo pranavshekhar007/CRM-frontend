@@ -104,7 +104,7 @@ export const getUserDetailsServ = async (id) => {
 // ✅ Dashboard Overview
 export const dashboardDetailsServ = async () => {
   try {
-    const response = await axios.get(BASE_URL + "user/dashboard-details");
+    const response = await axios.get(BASE_URL + "admin/dashboard-details");
     return response;
   } catch (error) {
     // Handle error (e.g., log or throw an error)

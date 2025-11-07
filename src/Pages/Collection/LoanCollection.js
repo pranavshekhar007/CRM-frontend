@@ -72,6 +72,8 @@ function LoanCollection() {
     pageCount: 10,
     sortByField: "createdAt",
     sortByOrder: "desc",
+    fromDate: "",
+    toDate: "",
   });
 
   const { canView, canCreate, canUpdate, canDelete } =
@@ -372,13 +374,17 @@ function LoanCollection() {
             </div>
           </div>
 
-          <div className="card shadow-sm p-3 mb-4 rounded-3 border-0">
-            <div className="row g-2 align-items-center">
-              <div className="col-lg-5">
+          <div className="card shadow-sm p-3 mb-4 rounded-3 border-0 filterCard">
+            <div className="row g-3 align-items-end">
+              {/* 🔍 Search */}
+              <div className="col-lg-4 col-md-6">
+                <label className="form-label fw-semibold small text-muted">
+                  Search by Customer
+                </label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search by Customer Name..."
+                  placeholder="Enter customer name..."
                   value={payload.searchKey}
                   onChange={(e) =>
                     setPayload({
@@ -390,8 +396,11 @@ function LoanCollection() {
                 />
               </div>
 
-              {/* Status Filter */}
-              <div className="col-lg-2">
+              {/* ⚙️ Status */}
+              <div className="col-lg-2 col-md-6">
+                <label className="form-label fw-semibold small text-muted">
+                  Status
+                </label>
                 <select
                   className="form-select"
                   value={payload.status || ""}
@@ -409,65 +418,53 @@ function LoanCollection() {
                 </select>
               </div>
 
-              {/* Filter by Date Type */}
-              <div className="col-lg-2">
-                <select
-                  className="form-select"
-                  value={payload.dateFilter || ""}
-                  onChange={(e) =>
-                    setPayload({
-                      ...payload,
-                      dateFilter: e.target.value,
-                      pageNo: 1,
-                    })
-                  }
-                >
-                  <option value="">Filter by Date</option>
-                  <option value="createdAt">Created Date</option>
-                  <option value="updatedAt">Updated Date</option>
-                  <option value="loanStartDate">Loan Start Date</option>
-                </select>
-              </div>
-
-              {/* Start Date */}
-              <div className="col-lg-2">
+              {/* 📅 Start Date */}
+              <div className="col-lg-2 col-md-6">
+                <label className="form-label fw-semibold small text-muted">
+                  Start Date
+                </label>
                 <input
                   type="date"
                   className="form-control"
-                  value={payload.startDate || ""}
+                  value={payload.fromDate || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,
-                      startDate: e.target.value,
+                      fromDate: e.target.value,
                       pageNo: 1,
                     })
                   }
                 />
               </div>
 
-              {/* End Date */}
-              <div className="col-lg-2">
+              {/* 📅 End Date */}
+              <div className="col-lg-2 col-md-6">
+                <label className="form-label fw-semibold small text-muted">
+                  End Date
+                </label>
                 <input
                   type="date"
                   className="form-control"
-                  value={payload.endDate || ""}
+                  value={payload.toDate || ""}
                   onChange={(e) =>
                     setPayload({
                       ...payload,
-                      endDate: e.target.value,
+                      toDate: e.target.value,
                       pageNo: 1,
                     })
                   }
                 />
               </div>
 
-              {/* Filter Button */}
-              <div className="col-lg-1 text-end">
+              {/* 🔎 Search Button */}
+              <div className="col-lg-2 col-md-6 text-end">
                 <button
-                  className="btn btn-success w-100"
+                  className="btn btn-success w-100 d-flex align-items-center justify-content-center"
                   onClick={handleGetLoans}
+                  style={{ gap: "6px", fontWeight: 600 }}
                 >
                   <FaSearch size={14} />
+                  <span>Search</span>
                 </button>
               </div>
             </div>
