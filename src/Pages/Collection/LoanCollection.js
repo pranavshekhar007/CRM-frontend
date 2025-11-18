@@ -1551,7 +1551,6 @@ function LoanCollection() {
                         type="number"
                         value={field.value}
                         onChange={handleFormChange}
-                        readOnly={modalMode !== "addExisting"} // ✅ Editable only for Add Existing
                         style={{
                           borderRadius: 8,
                           padding: "10px 12px",
