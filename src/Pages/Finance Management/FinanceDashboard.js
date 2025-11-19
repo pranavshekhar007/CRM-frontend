@@ -454,29 +454,29 @@ function FinanceDashboard() {
                       );
                     })
                   )}
-                 <tr
-  className="fw-bold total-row"
-  style={{
-    background: "#d1d5db", // darker gray
-    fontWeight: "600",
-    boxShadow: "inset 0 2px 4px rgba(0,0,0,0.06), 0 -3px 8px rgba(0,0,0,0.08)",
-  }}
->
-  <td style={{ color: "#111827" }}>Total</td>
-  <td className="text-success fw-semibold">
-    ₹{totals?.totalProfit?.toLocaleString() || 0}
-  </td>
-  <td className="text-danger fw-semibold">
-    ₹{totals?.totalExpense?.toLocaleString() || 0}
-  </td>
-  <td className="text-primary fw-semibold">
-    ₹{totals?.totalInvestment?.toLocaleString() || 0}
-  </td>
-  <td className="fw-semibold" style={{ color: "#eab308" }}>
-    ₹{totals?.totalReserve?.toLocaleString() || 0}
-  </td>
-</tr>
-
+                  <tr
+                    className="fw-bold total-row"
+                    style={{
+                      background: "#d1d5db", // darker gray
+                      fontWeight: "600",
+                      boxShadow:
+                        "inset 0 2px 4px rgba(0,0,0,0.06), 0 -3px 8px rgba(0,0,0,0.08)",
+                    }}
+                  >
+                    <td style={{ color: "#111827" }}>Total</td>
+                    <td className="text-success fw-semibold">
+                      ₹{totals?.totalProfit?.toLocaleString() || 0}
+                    </td>
+                    <td className="text-danger fw-semibold">
+                      ₹{totals?.totalExpense?.toLocaleString() || 0}
+                    </td>
+                    <td className="text-primary fw-semibold">
+                      ₹{totals?.totalInvestment?.toLocaleString() || 0}
+                    </td>
+                    <td className="fw-semibold" style={{ color: "#eab308" }}>
+                      ₹{totals?.totalReserve?.toLocaleString() || 0}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -558,7 +558,7 @@ function FinanceDashboard() {
 
                 {modalType === "investment" && (
                   <>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                       <label className="form-label">Duration Type</label>
                       <select
                         className="form-select"
@@ -574,7 +574,7 @@ function FinanceDashboard() {
                         <option value="Month">Month</option>
                         <option value="Year">Year</option>
                       </select>
-                    </div>
+                    </div> */}
 
                     <div className="mb-3">
                       <label className="form-label">Duration Value</label>

@@ -48,6 +48,8 @@ const initialLoanForm = {
   panCard: "",
   referenceBy: "",
   status: "Open",
+  loanType: "new",
+  manualProfit: "",
 };
 
 function LoanCollection() {
@@ -65,6 +67,11 @@ function LoanCollection() {
   const [showInstallmentModal, setShowInstallmentModal] = useState(false);
   const [selectedInstallLoan, setSelectedInstallLoan] = useState(null);
   const [installAmount, setInstallAmount] = useState("");
+
+  const [actionLoading, setActionLoading] = useState(false); // for create/update
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [installmentLoading, setInstallmentLoading] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   const [payload, setPayload] = useState({
     searchKey: "",
@@ -188,20 +195,29 @@ function LoanCollection() {
         return;
       }
 
-      // Normalize status to "Open"/"Closed"
+      setActionLoading(true);
+
       const payloadToSend = {
         ...loanForm,
         status: loanForm.status
           ? String(loanForm.status).charAt(0).toUpperCase() +
             String(loanForm.status).slice(1)
           : "Open",
+        loanType: loanForm.loanType || "new",
+        manualProfit:
+          loanForm.manualProfit === "" || loanForm.manualProfit === null
+            ? null
+            : Number(loanForm.manualProfit),
       };
 
       if (modalMode === "add") {
         await addLoanServ(payloadToSend);
         toast.success("Loan created successfully!");
       } else if (modalMode === "addExisting" && editingRecord) {
-        await addNewLoanForExistingServ(payloadToSend);
+        await addNewLoanForExistingServ({
+          ...payloadToSend,
+          phone: editingRecord.phone,
+        });
         toast.success("New loan added for existing user!");
       } else if (modalMode === "edit" && editingRecord) {
         await updateLoanServ({ ...payloadToSend, _id: editingRecord._id });
@@ -212,7 +228,11 @@ function LoanCollection() {
       handleGetLoans();
     } catch (err) {
       console.error(err);
-      toast.error(err?.message || "Failed to save loan");
+      toast.error(
+        err?.response?.data?.message || err?.message || "Failed to save loan"
+      );
+    } finally {
+      setActionLoading(false);
     }
   };
 
@@ -311,7 +331,13 @@ function LoanCollection() {
                 className="btn btn-outline-success d-flex align-items-center"
                 onClick={async () => {
                   try {
-                    const res = await downloadLoanExcelServ();
+                    setDownloadLoading(true);
+                    // prompt user for fields selection in your UI — for now, send all by default
+                    const selectedFields =
+                      window.selectedLoanExportFields || "all"; // adjust to your field selector
+                    const res = await downloadLoanExcelServ({
+                      params: { fields: selectedFields },
+                    });
                     const blob = new Blob([res.data], {
                       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     });
@@ -326,10 +352,17 @@ function LoanCollection() {
                   } catch (err) {
                     console.error(err);
                     toast.error("Failed to download Excel");
+                  } finally {
+                    setDownloadLoading(false);
                   }
                 }}
+                disabled={downloadLoading}
               >
-                <FaFileExcel size={18} />
+                {downloadLoading ? (
+                  <span className="spinner-border spinner-border-sm me-2" />
+                ) : (
+                  <FaFileExcel size={18} />
+                )}
                 <span>Download Excel</span>
               </button>
 
@@ -1500,6 +1533,45 @@ function LoanCollection() {
                     </div>
                   ))}
 
+                  {/* Loan Type */}
+                  <div className="col-md-6">
+                    <label
+                      className="form-label"
+                      style={{ fontSize: 13, color: "#6b7280" }}
+                    >
+                      Loan Type
+                    </label>
+                    <select
+                      className="form-select"
+                      name="loanType"
+                      value={loanForm.loanType || "new"}
+                      onChange={handleFormChange}
+                      style={{ borderRadius: 8, padding: "10px 12px" }}
+                    >
+                      <option value="new">New</option>
+                      <option value="renew">Renew</option>
+                    </select>
+                  </div>
+
+                  {/* Manual Profit */}
+                  <div className="col-md-6">
+                    <label
+                      className="form-label"
+                      style={{ fontSize: 13, color: "#6b7280" }}
+                    >
+                      Manual Profit (Optional)
+                    </label>
+                    <input
+                      className="form-control"
+                      name="manualProfit"
+                      type="number"
+                      value={loanForm.manualProfit ?? ""}
+                      onChange={handleFormChange}
+                      placeholder="Enter manual profit amount (overrides auto profit)"
+                      style={{ borderRadius: 8, padding: "10px 12px" }}
+                    />
+                  </div>
+
                   {/* Status Select Field */}
                   <div className="col-md-6">
                     <label
@@ -1574,12 +1646,23 @@ function LoanCollection() {
                       fontWeight: 600,
                     }}
                     onClick={handleSaveLoan}
+                    disabled={actionLoading}
                   >
-                    {modalMode === "add"
-                      ? "Create New Loan"
-                      : modalMode === "addExisting"
-                      ? "Add Loan for Existing User"
-                      : "Save All Changes"}
+                    {actionLoading ? (
+                      <>
+                        <span
+                          className="spinner-border spinner-border-sm me-2"
+                          role="status"
+                        />
+                        Saving...
+                      </>
+                    ) : modalMode === "add" ? (
+                      "Create New Loan"
+                    ) : modalMode === "addExisting" ? (
+                      "Add Loan for Existing User"
+                    ) : (
+                      "Save All Changes"
+                    )}
                   </button>
                 )}
               </div>
