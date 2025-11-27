@@ -71,33 +71,42 @@ export const addInstallmentServ = async (id, formData) => {
   }
 };
 
-// ✅ Download Excel
-export const downloadLoanExcelServ = async () => {
-    try {
-      const response = await axios.get(BASE_URL + "loan/download/excel", {
+// ✅ Download Excel with params
+export const downloadLoanExcelServ = async (options = {}) => {
+  try {
+    const response = await axios.get(
+      BASE_URL + "loan/download/excel",
+      {
+        params: options.params,       // ← IMPORTANT
         responseType: "blob",
         headers: { Authorization: `Bearer ${token}` },
-      });
-      return response;
-    } catch (error) {
-      console.error("Error downloading Excel:", error);
-      throw error;
-    }
-  };
-  
-  // ✅ Download PDF
-  export const downloadLoanPDFServ = async () => {
-    try {
-      const response = await axios.get(BASE_URL + "loan/download/pdf", {
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error downloading Excel:", error);
+    throw error;
+  }
+};
+
+// ✅ Download PDF with params
+export const downloadLoanPDFServ = async (options = {}) => {
+  try {
+    const response = await axios.get(
+      BASE_URL + "loan/download/pdf",
+      {
+        params: options.params,       // ← IMPORTANT
         responseType: "blob",
         headers: { Authorization: `Bearer ${token}` },
-      });
-      return response;
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
-      throw error;
-    }
-  };
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error downloading PDF:", error);
+    throw error;
+  }
+};
+
 
   // ✅ Add New Loan for Existing User
 export const addNewLoanForExistingServ = async (formData) => {

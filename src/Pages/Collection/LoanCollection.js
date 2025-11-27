@@ -72,6 +72,7 @@ function LoanCollection() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [installmentLoading, setInstallmentLoading] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const [payload, setPayload] = useState({
     searchKey: "",
@@ -315,6 +316,27 @@ function LoanCollection() {
   const endIndex = Math.min(startIndex + payload.pageCount, totalRecords);
   const totalPages = Math.ceil(totalRecords / payload.pageCount);
 
+  const [showColumnModal, setShowColumnModal] = useState(false);
+
+  const columnOptions = [
+    { key: "name", label: "Customer Name" },
+    { key: "phone", label: "Phone" },
+    { key: "loanAmount", label: "Loan Amount" },
+    { key: "givenAmount", label: "Given Amount" },
+    { key: "perDayCollection", label: "Per Day" },
+    { key: "daysForLoan", label: "Days" },
+    { key: "totalDueInstallments", label: "Due Installments" },
+    { key: "totalPaidInstallments", label: "Paid Installments" },
+    { key: "totalPaidLoan", label: "Total Paid" },
+    { key: "remainingLoan", label: "Remaining Loan" },
+    { key: "adharCard", label: "Aadhaar" },
+    { key: "panCard", label: "PAN" },
+    { key: "referenceBy", label: "Reference" },
+    { key: "status", label: "Status" },
+  ];
+
+  const [selectedColumns, setSelectedColumns] = useState([]);
+
   return (
     <div className="bodyContainer">
       <Sidebar selectedMenu="Collections" selectedItem="Collections" />
@@ -329,64 +351,29 @@ function LoanCollection() {
               {/* ✅ Download Excel */}
               <button
                 className="btn btn-outline-success d-flex align-items-center"
-                onClick={async () => {
-                  try {
-                    setDownloadLoading(true);
-                    // prompt user for fields selection in your UI — for now, send all by default
-                    const selectedFields =
-                      window.selectedLoanExportFields || "all"; // adjust to your field selector
-                    const res = await downloadLoanExcelServ({
-                      params: { fields: selectedFields },
-                    });
-                    const blob = new Blob([res.data], {
-                      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    });
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", "Loan_Collection.xlsx");
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    toast.success("Excel downloaded successfully!");
-                  } catch (err) {
-                    console.error(err);
-                    toast.error("Failed to download Excel");
-                  } finally {
-                    setDownloadLoading(false);
+                onClick={() => {
+                  window.exportType = "excel"; // 👈 SET EXCEL TYPE
+                  if (selectedRows.length === 0) {
+                    toast.error("Please select rows to export.");
+                    return;
                   }
+                  setShowColumnModal(true);
                 }}
-                disabled={downloadLoading}
               >
-                {downloadLoading ? (
-                  <span className="spinner-border spinner-border-sm me-2" />
-                ) : (
-                  <FaFileExcel size={18} />
-                )}
+                <FaFileExcel size={18} />
                 <span>Download Excel</span>
               </button>
 
               {/* ✅ Download PDF */}
               <button
                 className="btn btn-outline-danger d-flex align-items-center"
-                onClick={async () => {
-                  try {
-                    const res = await downloadLoanPDFServ();
-                    const blob = new Blob([res.data], {
-                      type: "application/pdf",
-                    });
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.setAttribute("download", "Loan_Collection.pdf");
-                    document.body.appendChild(link);
-                    link.click();
-                    link.remove();
-                    toast.success("PDF downloaded successfully!");
-                  } catch (err) {
-                    console.error(err);
-                    toast.error("Failed to download PDF");
+                onClick={() => {
+                  window.exportType = "pdf"; // 👈 SET PDF TYPE
+                  if (selectedRows.length === 0) {
+                    toast.error("Please select rows to export.");
+                    return;
                   }
+                  setShowColumnModal(true);
                 }}
               >
                 <FaFilePdf size={18} />
@@ -530,6 +517,21 @@ function LoanCollection() {
                   }}
                 >
                   <tr>
+                    <th>
+                      <input
+                        type="checkbox"
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedRows(list.map((row) => row._id)); // select all
+                          } else {
+                            setSelectedRows([]); // unselect all
+                          }
+                        }}
+                        checked={
+                          selectedRows.length === list.length && list.length > 0
+                        }
+                      />
+                    </th>
                     {[
                       "#",
                       "Name",
@@ -589,6 +591,22 @@ function LoanCollection() {
                         }}
                         className="row-hover"
                       >
+                        <td className="px-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedRows.includes(loan._id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedRows([...selectedRows, loan._id]);
+                              } else {
+                                setSelectedRows(
+                                  selectedRows.filter((id) => id !== loan._id)
+                                );
+                              }
+                            }}
+                          />
+                        </td>
+
                         <td className="fw-medium text-secondary px-3">
                           {startIndex + i + 1}
                         </td>
@@ -1478,12 +1496,12 @@ function LoanCollection() {
                       type: "number",
                       value: loanForm.daysForLoan,
                     },
-                    {
-                      name: "totalDueInstallments",
-                      label: "Total Due Installments",
-                      type: "number",
-                      value: loanForm.totalDueInstallments,
-                    },
+                    // {
+                    //   name: "totalDueInstallments",
+                    //   label: "Total Due Installments",
+                    //   type: "number",
+                    //   value: loanForm.totalDueInstallments,
+                    // },
                     {
                       name: "referenceBy",
                       label: "Reference By",
@@ -1762,6 +1780,124 @@ function LoanCollection() {
                   onClick={handleConfirmAddInstallment}
                 >
                   Add Installment
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showColumnModal && (
+          <div
+            className="modal-overlay"
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 3000,
+            }}
+          >
+            <div
+              className="modal-content bg-white p-4 rounded-3 shadow"
+              style={{ width: 420 }}
+            >
+              <h5 className="fw-bold mb-3">Select Columns for Export</h5>
+
+              <div
+                style={{
+                  maxHeight: 300,
+                  overflowY: "auto",
+                  paddingRight: 5,
+                }}
+              >
+                {columnOptions.map((col) => (
+                  <div key={col.key} className="form-check mb-2">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      checked={selectedColumns.includes(col.key)}
+                      onChange={() => {
+                        if (selectedColumns.includes(col.key)) {
+                          setSelectedColumns(
+                            selectedColumns.filter((c) => c !== col.key)
+                          );
+                        } else {
+                          setSelectedColumns([...selectedColumns, col.key]);
+                        }
+                      }}
+                    />
+                    <label className="form-check-label">{col.label}</label>
+                  </div>
+                ))}
+              </div>
+
+              {/* Modal Buttons */}
+              <div className="d-flex justify-content-end gap-2 mt-3">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowColumnModal(false)}
+                >
+                  Cancel
+                </button>
+
+                {/* EXPORT BUTTON */}
+                <button
+                  className="btn btn-success"
+                  onClick={async () => {
+                    if (selectedColumns.length === 0) {
+                      toast.error("Please select at least one column.");
+                      return;
+                    }
+
+                    try {
+                      // Excel or PDF based on user’s last selection
+                      if (window.exportType === "excel") {
+                        const res = await downloadLoanExcelServ({
+                          params: {
+                            rows: selectedRows.join(","),
+                            fields: selectedColumns.join(","),
+                          },
+                        });
+
+                        const blob = new Blob([res.data], {
+                          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        });
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement("a");
+                        link.href = url;
+                        link.setAttribute("download", "Loan_Export.xlsx");
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                      } else {
+                        const res = await downloadLoanPDFServ({
+                          params: {
+                            rows: selectedRows.join(","),
+                            fields: selectedColumns.join(","),
+                          },
+                        });
+
+                        const blob = new Blob([res.data], {
+                          type: "application/pdf",
+                        });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement("a");
+                        a.href = url;
+                        a.download = "Loan_Export.pdf";
+                        a.click();
+                      }
+
+                      toast.success("File downloaded successfully!");
+                      setShowColumnModal(false);
+                    } catch (err) {
+                      console.error(err);
+                      toast.error("Export failed");
+                    }
+                  }}
+                >
+                  Export
                 </button>
               </div>
             </div>
