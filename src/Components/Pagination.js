@@ -20,7 +20,7 @@ function Pagination({ payload, setPayload, totalCount }) {
     setPayload((prev) => ({ ...prev, pageCount: newPageCount, pageNo: 1 }));
   };
 
-  const pageOptions = [10, 20, 30, 50, 100].filter((opt) => opt <= totalCount);
+  const pageOptions = [10, 20, 30, 50, 100]
 
   return (
     <div className="pagination-wrapper">

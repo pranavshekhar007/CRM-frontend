@@ -540,7 +540,7 @@ function LoanCollection() {
                       "Given",
                       "Per Day",
                       "Days",
-                      "Due Inst.",
+                     
                       "Paid Inst.",
                       "Paid Loan",
                       "Remaining",
@@ -620,9 +620,7 @@ function LoanCollection() {
                         <td className="px-3">₹{loan.givenAmount ?? 0}</td>
                         <td className="px-3">₹{loan.perDayCollection ?? 0}</td>
                         <td className="px-3">{loan.daysForLoan ?? "-"}</td>
-                        <td className="px-3">
-                          {loan.totalDueInstallments ?? "-"}
-                        </td>
+                        
                         <td className="text-primary fw-semibold px-3">
                           {loan.totalPaidInstallments ?? 0}
                         </td>
